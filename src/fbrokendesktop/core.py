@@ -52,29 +52,35 @@ def is_gapp_cmd(cmd_args: list[str]):
     )
 
 
+def check_invalid_desktop_entry(file_path: str, show_hidden: bool):
+    de = DesktopEntry(file_path)
+    file_name = shlex.quote(de.getFileName())
+    if de.getHidden():
+        return file_name
+
+    if not de.getNoDisplay() or show_hidden:
+        if exc := t.cast(str | None, (de.getExec() or de.getTryExec())):
+            logging.debug(f"Checking executable: {exc}")
+            try:
+                cmd = shlex.split(exc)
+                cmd = strip_command_parent(cmd)
+                if is_gapp_cmd(cmd):
+                    logging.debug(f"==> Executable is GTK application: {exc}")
+                    if not is_valid_gapp_cmd(cmd[2]):
+                        return file_name
+                elif not (cmd and shutil.which(cmd[0])):
+                    return file_name
+            except ValueError as err:
+                logging.error(f"Error parsing executable '{file_path}': {err}")
+    return None
+
+
 def find_missing_desktop_files(desktop_dir: str, show_hidden: bool):
     for df in glob.iglob("*.desktop", root_dir=desktop_dir):
         file_path = path.join(desktop_dir, df)
-        de = DesktopEntry(file_path)
-        file_name = shlex.quote(de.getFileName())
-        if de.getHidden():
+        file_name = check_invalid_desktop_entry(file_path, show_hidden)
+        if file_name:
             yield file_name
-            continue
-
-        if not de.getNoDisplay() or show_hidden:
-            if exc := t.cast(str | None, (de.getExec() or de.getTryExec())):
-                logging.debug(f"Checking executable: {exc}")
-                try:
-                    cmd = shlex.split(exc)
-                    cmd = strip_command_parent(cmd)
-                    if is_gapp_cmd(cmd):
-                        logging.debug(f"==> Executable is GTK application: {exc}")
-                        if not is_valid_gapp_cmd(cmd[2]):
-                            yield file_name
-                    elif not (cmd and shutil.which(cmd[0])):
-                        yield file_name
-                except ValueError as err:
-                    logging.error(f"Error parsing executable '{file_path}': {err}")
 
 
 def find_desktop_directories():

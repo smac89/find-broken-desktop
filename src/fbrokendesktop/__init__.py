@@ -20,12 +20,16 @@ def main(args: cli.Args | None = None):
     logging.info("==> Finding broken desktop files. This might take a while... <==")
     broken_files: list[str] = []
 
-    for d in core.find_desktop_directories():
+    for d in args.dir_paths or core.find_desktop_directories():
         logging.debug(f"Searching in directory: {d}...")
         for df in core.find_missing_desktop_files(d, args.hidden):
             if args.user and not os.access(df, os.W_OK | os.R_OK):
                 continue
             broken_files.append(df)
+
+    for f in args.file_paths:
+        if file_name := core.check_invalid_desktop_entry(f, args.hidden):
+            broken_files.append(file_name)
 
     if not broken_files:
         logging.info("No broken desktop entries found.")
