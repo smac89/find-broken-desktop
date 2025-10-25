@@ -1,13 +1,11 @@
-# fbrokendesktop
-Search for broken Exec in *.desktop files
+# find-broken-desktop
 
-Can be used to check a single *.desktop file or preset folders.
+Find desktop entry files (\*.desktop) with broken executables.
 
-Thanks to:
-grail LQ Guru for helping to simplify code
+Can be used to check a single \*.desktop file or preset folders.
 
-Examples:
+Forked https://github.com/AndyCrowd/fbrokendesktop with the following changes:
 
-fbrokendesktop /usr
-
-fbrokendesktop
+-  Written in python and use pyxdg for better portability
+-  Improved command line interface
+-  Added option to list only entries owned by the current user
