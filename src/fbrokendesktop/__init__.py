@@ -14,12 +14,8 @@ def main(args: cli.Args | None = None):
         logging.info("Using default arguments")
         args = cli.Args()
 
-    logging.basicConfig(
-        level=logging.DEBUG if args.debug else logging.INFO,
-        style="{",
-        format="{levelname}:\t[{asctime} {name}] {message}",
-        datefmt=logging.Formatter.default_time_format,
-    )
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
 
     logging.info("==> Finding broken desktop files. This might take a while... <==")
     broken_files: list[str] = []
@@ -47,4 +43,10 @@ def main(args: cli.Args | None = None):
 
 def __run():
     logging.root.name = __name__
+    logging.basicConfig(
+        level=logging.INFO,
+        style="{",
+        format="{levelname}:\t[{asctime} {name}] {message}",
+        datefmt=logging.Formatter.default_time_format,
+    )
     main(cli.Args.parse_args())
