@@ -33,12 +33,18 @@ def main(args: cli.Args | None = None):
 
     logging.info(f"Found {len(broken_files)} broken desktop entries:")
     if args.delete:
-        if args.prompt:
-            logging.info("Are you sure you want to delete these files?")
-            if input("Type 'yes' to continue: ").lower() != "yes":
-                return
-        logging.info("Deleting files...")
         for df in broken_files:
+            if args.prompt:
+                match input(f"Delete {df}? [y/Y(all),n/N(cancel)] "):
+                    case "N" | "NO" | "No":
+                        return
+                    case all if all.startswith("Y") and all.upper() in ("Y", "YE", "YES"):
+                        args.prompt = False
+                    case yes if yes.startswith("y") and yes.lower() in ("y", "ye", "yes"):
+                        pass
+                    case _:
+                        logging.info(f"Skipped {df}")
+                        continue
             os.remove(df)
             logging.info(f"Deleted {df}")
     else:
