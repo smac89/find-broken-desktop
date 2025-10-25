@@ -33,6 +33,10 @@ def main(args: cli.Args | None = None):
 
     logging.info(f"Found {len(broken_files)} broken desktop entries:")
     if args.delete:
+        if args.prompt:
+            logging.info("Are you sure you want to delete these files?")
+            if input("Type 'yes' to continue: ").lower() != "yes":
+                return
         logging.info("Deleting files...")
         for df in broken_files:
             os.remove(df)

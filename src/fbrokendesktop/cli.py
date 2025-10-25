@@ -6,6 +6,7 @@ class Args(argparse.Namespace):
     hidden: bool
     delete: bool
     debug: bool
+    prompt: bool
 
     @classmethod
     def parse_args(cls):
@@ -23,6 +24,12 @@ class Args(argparse.Namespace):
             action="store_true",
             help="delete the missing entries",
             default=False,
+        )
+        parser.add_argument(
+            "--prompt",
+            action=argparse.BooleanOptionalAction,
+            help="prompt for confirmation before deleting",
+            default=True,
         )
         parser.add_argument(
             "-u",
