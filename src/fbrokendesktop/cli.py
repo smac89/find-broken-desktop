@@ -24,7 +24,7 @@ class Args(argparse.Namespace):
         )
         parser.add_argument(
             "--hidden",
-            "--show_hidden",
+            "--show-hidden",
             action="store_true",
             help="show hidden (aka NoDisplay) desktop entries",
             default=False,
