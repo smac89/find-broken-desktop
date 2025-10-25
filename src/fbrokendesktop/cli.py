@@ -1,5 +1,10 @@
 import argparse
 
+try:
+    from fbrokendesktop._version import __version__
+except ImportError:
+    __version__ = "unknown"
+
 
 class Args(argparse.Namespace):
     user: bool
@@ -11,6 +16,12 @@ class Args(argparse.Namespace):
     @classmethod
     def parse_args(cls):
         parser = argparse.ArgumentParser(description="Find desktop entry files (*.desktop) with broken executables.")
+        parser.add_argument(
+            "-v",
+            "--version",
+            action="version",
+            version=f"%(prog)s {__version__ if __version__.startswith('v') or __version__ == 'unknown' else f'v{__version__}'}",
+        )
         parser.add_argument(
             "--hidden",
             "--show_hidden",
