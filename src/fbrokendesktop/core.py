@@ -63,18 +63,18 @@ def find_missing_desktop_files(desktop_dir: str, show_hidden: bool):
 
         if not de.getNoDisplay() or show_hidden:
             if exc := t.cast(str | None, (de.getExec() or de.getTryExec())):
-                logging.debug(f"Found executable: {exc}")
+                logging.debug(f"Checking executable: {exc}")
                 try:
                     cmd = shlex.split(exc)
                     cmd = strip_command_parent(cmd)
                     if is_gapp_cmd(cmd):
-                        logging.debug(f"==> Is GTK application: {exc}")
+                        logging.debug(f"==> Executable is GTK application: {exc}")
                         if not is_valid_gapp_cmd(cmd[2]):
                             yield file_name
                     elif not (cmd and shutil.which(cmd[0])):
                         yield file_name
                 except ValueError as err:
-                    logging.error(f"Error parsing '{file_path}': {err}")
+                    logging.error(f"Error parsing executable '{file_path}': {err}")
 
 
 def find_desktop_directories():

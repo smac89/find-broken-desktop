@@ -1,10 +1,11 @@
 import argparse
 
 
-class Cli(argparse.Namespace):
-    user: bool = False
-    hidden: bool = False
-    delete: bool = False
+class Args(argparse.Namespace):
+    user: bool
+    hidden: bool
+    delete: bool
+    debug: bool
 
     @classmethod
     def parse_args(cls):
@@ -17,7 +18,7 @@ class Cli(argparse.Namespace):
             default=False,
         )
         parser.add_argument(
-            "-d",
+            "-x",
             "--delete",
             action="store_true",
             help="delete the missing entries",
@@ -28,6 +29,13 @@ class Cli(argparse.Namespace):
             "--user",
             action="store_true",
             help="list only the entries which are owned by the current user",
+            default=False,
+        )
+        parser.add_argument(
+            "-d",
+            "--debug",
+            action="store_true",
+            help="enable debug logging",
             default=False,
         )
         return parser.parse_args(namespace=cls())

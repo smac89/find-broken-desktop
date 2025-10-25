@@ -1,3 +1,3 @@
-from fbrokendesktop import cli, main
+import fbrokendesktop
 
-main(cli.Cli.parse_args())
+fbrokendesktop.__run()
