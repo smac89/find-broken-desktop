@@ -1,4 +1,6 @@
 import argparse
+import functools
+import pathlib
 
 try:
     from fbrokendesktop._version import __version__
@@ -6,12 +8,21 @@ except ImportError:
     __version__ = "unknown"
 
 
-class Args(argparse.Namespace):
+class Args(argparse.Namespace):  # https://docs.python.org/3/library/argparse.html#the-namespace-object
     user: bool
     hidden: bool
     delete: bool
     debug: bool
     prompt: bool
+    paths: list[pathlib.Path]
+
+    @functools.cached_property
+    def dir_paths(self):
+        return [str(p.absolute()) for p in self.paths if p.is_dir()]
+
+    @functools.cached_property
+    def file_paths(self):
+        return [str(p.absolute()) for p in self.paths if p.is_file()]
 
     @classmethod
     def parse_args(cls):
@@ -55,5 +66,11 @@ class Args(argparse.Namespace):
             action="store_true",
             help="enable debug logging",
             default=False,
+        )
+        parser.add_argument(
+            "paths",
+            type=pathlib.Path,
+            nargs=argparse.REMAINDER,
+            help="(optional) directories/files to search for missing desktop entries",
         )
         return parser.parse_args(namespace=cls())
