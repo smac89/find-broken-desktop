@@ -11,13 +11,16 @@ license = { text = "GPL" }
 dependencies = ["pyxdg==0.28"]
 
 [project.urls]
-Repository = "https://github.com/smac89/find-broken-desktop"
+homepage = "https://github.com/smac89/find-broken-desktop"
+source = "https://github.com/smac89/find-broken-desktop"
+issues = "https://github.com/smac89/find-broken-desktop/issues"
+download = "https://github.com/smac89/find-broken-desktop/tags"
 
 [dependency-groups]
 dev = ["ruff>=0.14.2"]
 
 [project.scripts]
-find-broken-desktop = "fbrokendesktop:__run"
+find-broken-desktop = "fbrokendesktop:run"
 
 [tool.ruff]
 fix = true

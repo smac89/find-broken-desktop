@@ -75,9 +75,9 @@ def check_invalid_desktop_entry(file_path: str, show_hidden: bool):
     return None
 
 
-def find_missing_desktop_files(desktop_dir: str, show_hidden: bool):
-    for df in glob.iglob("*.desktop", root_dir=desktop_dir):
-        file_path = path.join(desktop_dir, df)
+def find_missing_desktop_files_in_dir(desktop_dir: str, show_hidden: bool):
+    for desktop in glob.iglob("*.desktop", root_dir=desktop_dir):
+        file_path = path.join(desktop_dir, desktop)
         file_name = check_invalid_desktop_entry(file_path, show_hidden)
         if file_name:
             yield file_name

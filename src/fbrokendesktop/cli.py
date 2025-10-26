@@ -1,5 +1,4 @@
 import argparse
-import functools
 import pathlib
 
 try:
@@ -15,14 +14,6 @@ class Args(argparse.Namespace):  # https://docs.python.org/3/library/argparse.ht
     debug: bool
     prompt: bool
     paths: list[pathlib.Path]
-
-    @functools.cached_property
-    def dir_paths(self):
-        return [str(p.absolute()) for p in self.paths if p.is_dir()]
-
-    @functools.cached_property
-    def file_paths(self):
-        return [str(p.absolute()) for p in self.paths if p.is_file()]
 
     @classmethod
     def parse_args(cls):
