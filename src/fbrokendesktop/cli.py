@@ -13,6 +13,7 @@ class Args(argparse.Namespace):  # https://docs.python.org/3/library/argparse.ht
     delete: bool
     debug: bool
     prompt: bool
+    quiet: bool
     paths: list[pathlib.Path]
 
     @classmethod
@@ -39,6 +40,7 @@ class Args(argparse.Namespace):  # https://docs.python.org/3/library/argparse.ht
             default=False,
         )
         parser.add_argument(
+            "-p",
             "--prompt",
             action=argparse.BooleanOptionalAction,
             help="prompt for confirmation before deleting",
@@ -56,6 +58,13 @@ class Args(argparse.Namespace):  # https://docs.python.org/3/library/argparse.ht
             "--debug",
             action="store_true",
             help="enable debug logging",
+            default=False,
+        )
+        parser.add_argument(
+            "-q",
+            "--quiet",
+            action="store_true",
+            help="suppress logging",
             default=False,
         )
         parser.add_argument(

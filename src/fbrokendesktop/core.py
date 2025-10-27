@@ -11,23 +11,24 @@ from xdg import BaseDirectory
 from xdg.DesktopEntry import DesktopEntry
 
 # allow matching empty envs with .*
-env_re = re.compile(r"(\w+=.*)+")
+env_re = re.compile(r'(\w+=.*)')
 
 # installed GTK apps
 gapps = []
 
 
 def strip_command_parent(cmd_args: list[str], is_first: bool = True) -> list[str]:
-    # ignore every environment variable set
-    while cmd_args and env_re.match(cmd_args[0]):
-        cmd_args = cmd_args[1:]
     try:
-        cmd = cmd_args[0]
+        # ignore every environment variable set
+        while cmd_args[0].startswith("-") or env_re.match(cmd_args[0]):
+            cmd_args = cmd_args[1:]
+        arg0 = cmd_args[0]
     except IndexError:
-        cmd = ""
-    if is_first and cmd == "exec":
+        arg0 = ""
+    # only care about exec if it's the first program executed
+    if is_first and arg0 == "exec":
         return strip_command_parent(cmd_args[1:], is_first=False)
-    if cmd == "env" or cmd.endswith("/env"):
+    if arg0 == "env" or arg0.endswith("/env"):
         return strip_command_parent(cmd_args[1:], is_first=False)
     return cmd_args
 

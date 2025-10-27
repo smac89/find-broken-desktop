@@ -1,6 +1,7 @@
 # find-broken-desktop
 
 Find desktop entry files (\*.desktop) with broken executables.
+By default searches common applications directories as well as some autostart directories.
 
 Can be used to check a single \*.desktop file or preset folders.
 

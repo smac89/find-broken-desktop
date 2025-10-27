@@ -19,7 +19,9 @@ def main(args: cli.Args | None = None):
         logging.info("Using default arguments")
         args = cli.Args()
 
-    if args.debug:
+    if args.quiet:
+        logging.getLogger().disabled = True
+    elif args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
     logging.info("==> Finding broken desktop files. This might take a while... <==")
